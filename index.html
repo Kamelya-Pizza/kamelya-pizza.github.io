@@ -8,6 +8,22 @@
 </style>
 </head>
 <body>
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  const masa = new URLSearchParams(window.location.search).get('masa');
+  const auswahl = document.getElementById('place');
+  if (masa && auswahl) {
+    const option = Array.from(auswahl.options).find(
+      o => o.value === masa || o.text.trim() === masa
+    );
+    if (option) {
+      auswahl.value = option.value;
+      auswahl.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+});
+</script>
+  
 <header><h1>🍕 Kamelya Pizza</h1><p>Menü & WhatsApp Sipariş</p></header>
 <main>
 <label for="place">Nerede oturuyorsunuz? / Masa seçiniz</label>
