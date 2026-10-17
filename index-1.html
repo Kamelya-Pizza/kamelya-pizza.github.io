@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kamelya Pizza | Sipariş</title>
+<style>
+:root{font-family:system-ui,-apple-system,Arial,sans-serif;color:#29251e;background:#f8f5ef}*{box-sizing:border-box}body{margin:0}header{background:#284b37;color:white;padding:24px 18px;text-align:center}h1{margin:0;font-size:30px}header p{margin:7px 0 0}main{max-width:680px;margin:auto;padding:18px 14px 130px}label{font-weight:700}select{width:100%;font:inherit;padding:13px;border:1px solid #bbb;border-radius:10px;margin:10px 0 22px;background:white}.item{display:flex;align-items:center;justify-content:space-between;gap:10px;background:white;border:1px solid #e5ded2;border-radius:12px;padding:13px;margin:9px 0}.name{font-weight:700}.price{font-size:14px;color:#68645e;margin-top:4px}.controls{display:flex;align-items:center;gap:12px}.controls button{border:0;background:#e7eee7;border-radius:9px;width:36px;height:36px;font-size:23px;cursor:pointer}.controls span{min-width:18px;text-align:center}h2{font-size:20px;margin:25px 0 12px}.bottom{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ddd;padding:12px 15px;box-shadow:0 -4px 18px #0001}.bottom>div{max-width:680px;margin:auto;display:flex;gap:12px;align-items:center;justify-content:space-between}.bottom button{background:#178a4e;color:white;border:0;border-radius:12px;padding:15px 18px;font-weight:700;font-size:15px;cursor:pointer}.note{color:#68645e;font-size:13px;margin-top:14px}
+</style>
+</head>
+<body>
+<header><h1>🍕 Kamelya Pizza</h1><p>Menü & WhatsApp Sipariş</p></header>
+<main>
+<label for="place">Nerede oturuyorsunuz? / Masa seçiniz</label>
+<select id="place"><option value="">Lütfen yerinizi seçin</option><option>Iglo 1</option><option>Iglo 2</option><option>Çadır</option><option>Büyük Kamelya</option><option>Küçük Kamelya</option><option>Kamelya Önü</option><option>Şemsiye Önü</option><option>Yeşillik Önü</option><option>Siyah Masa</option><option>Duvar Önü</option><option>Yeni Masa Takımı</option><option>Diğer Masa</option></select>
+<div id="menu"></div>
+<p class="note">Siparişiniz WhatsApp'ta hazırlanır. Göndermek için WhatsApp'taki gönder düğmesine basınız. Fiyatlar değişebilir.</p>
+</main>
+<div class="bottom"><div><strong id="total">0 TL</strong><button id="send">WhatsApp ile Sipariş Ver →</button></div></div>
+<script>
+// Menü ve fiyatları daha sonra buradan değiştirebilirsiniz.
+const sections=[
+ {title:'🍕 Pizzalar',items:[['Margarita',325],['Kremalı Mantarlı',375],['Sucuklu',375],['Karışık',375],['Ton Balıklı',375],['Sosisli',400],['Çikolatalı',375]]},
+ {title:'🍟 Yan Ürünler',items:[['Patates Küçük',100],['Patates Büyük',200]]},
+ {title:'🥤 İçecekler',items:[['Bardak Kola 250 ml',50],['Cola Zero',50],['Ice Tea',50],['Ayran 180 ml',25],['Ayran 280 ml',50],['Kola 1 L',100],['Kola Turka 2,5 L',120],['Türk Kahvesi',80],['Çay',0]]},
+ {title:'🍨 Diğer',items:[['Dondurma',150],['Semaver (90 dk)',400]]}
+];
+const counts={};const menu=document.getElementById('menu');
+sections.forEach(section=>{const h=document.createElement('h2');h.textContent=section.title;menu.append(h);section.items.forEach(([name,price])=>{counts[name]=0;const card=document.createElement('div');card.className='item';const left=document.createElement('div');const n=document.createElement('div');n.className='name';n.textContent=name;const p=document.createElement('div');p.className='price';p.textContent=price?price+' TL':'Fiyat sorunuz';left.append(n,p);const controls=document.createElement('div');controls.className='controls';const minus=document.createElement('button');minus.textContent='−';minus.setAttribute('aria-label',name+' azalt');const amount=document.createElement('span');amount.textContent='0';const plus=document.createElement('button');plus.textContent='+';plus.setAttribute('aria-label',name+' artır');minus.onclick=()=>change(-1);plus.onclick=()=>change(1);function change(delta){counts[name]=Math.max(0,counts[name]+delta);amount.textContent=counts[name];update()}controls.append(minus,amount,plus);card.append(left,controls);menu.append(card)})});
+function update(){let total=0;sections.forEach(s=>s.items.forEach(([name,price])=>total+=counts[name]*price));document.getElementById('total').textContent=total+' TL'}
+document.getElementById('send').onclick=()=>{const place=document.getElementById('place').value;if(!place){alert('Lütfen önce oturduğunuz yeri seçin.');return}const lines=[];let total=0;sections.forEach(s=>s.items.forEach(([name,price])=>{if(counts[name]>0){lines.push(`${counts[name]} x ${name}${price?' — '+counts[name]*price+' TL':''}`);total+=counts[name]*price}}));if(!lines.length){alert('Lütfen en az bir ürün seçin.');return}const msg=`🍕 Kamelya Pizza Sipariş\n📍 Yer: ${place}\n\n${lines.join('\n')}\n\nToplam (fiyatı belirtilen ürünler): ${total} TL`;window.location.href='https://wa.me/905312732676?text='+encodeURIComponent(msg)};
+</script>
+</body></html>
