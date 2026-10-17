@@ -34,12 +34,14 @@ window.addEventListener('DOMContentLoaded', function() {
 <div class="bottom"><div><strong id="total">0 TL</strong><button id="send">WhatsApp ile Sipariş Ver →</button></div></div>
 <script>
 // Menü ve fiyatları daha sonra buradan değiştirebilirsiniz.
+
 const sections=[
- {title:'🍕 Pizzalar',items:[['Margarita',325],['Kremalı Mantarlı',375],['Sucuklu',375],['Karışık',375],['Ton Balıklı',375],['Sosisli',400],['Çikolatalı',375]]},
- {title:'🍟 Yan Ürünler',items:[['Patates Küçük',100],['Patates Büyük',200]]},
- {title:'🥤 İçecekler',items:[['Bardak Kola 250 ml',50],['Cola Zero',50],['Ice Tea',50],['Ayran 180 ml',25],['Ayran 280 ml',50],['Kola 1 L',100],['Kola Turka 2,5 L',120],['Türk Kahvesi',80],['Çay',0]]},
- {title:'🍨 Diğer',items:[['Dondurma',150],['Semaver (90 dk)',400]]}
+ {title:'🍕 Pizzalar',items:[['Karışık Pizza',400],['Mantarlı Kremalı Pizza',400],['Margarita Pizza',350],['Sucuklu Pizza',400],['Sosisli Pizza',400],['Ton Balıklı Pizza',400],['Çikolatalı Pizza',500]]},
+ {title:'🍟 Extra',items:[['Patates Küçük',100],['Patates Büyük',200],['Semaver Orta Demlik',400],['Semaver Büyük Demlik',600]]},
+ {title:'🥤 Soğuk İçecekler',items:[['Kutu Su',5],['Sade Soda',25],['Gazoz',50],['Pepsi',80],['Pepsi Zero',80],['Lipton Ice Şeftali',80],['Lipton Ice Tea Mango',80],['Yedigün Portakallı',80],['Ayran Küçük',25],['Ayran Büyük',50]]},
+ {title:'☕ Sıcak İçecekler',items:[['Çay Küçük',40],['Çay Büyük',80],['Türk Kahvesi',100]]}
 ];
+
 const counts={};const menu=document.getElementById('menu');
 sections.forEach(section=>{const h=document.createElement('h2');h.textContent=section.title;menu.append(h);section.items.forEach(([name,price])=>{counts[name]=0;const card=document.createElement('div');card.className='item';const left=document.createElement('div');const n=document.createElement('div');n.className='name';n.textContent=name;const p=document.createElement('div');p.className='price';p.textContent=price?price+' TL':'Fiyat sorunuz';left.append(n,p);const controls=document.createElement('div');controls.className='controls';const minus=document.createElement('button');minus.textContent='−';minus.setAttribute('aria-label',name+' azalt');const amount=document.createElement('span');amount.textContent='0';const plus=document.createElement('button');plus.textContent='+';plus.setAttribute('aria-label',name+' artır');minus.onclick=()=>change(-1);plus.onclick=()=>change(1);function change(delta){counts[name]=Math.max(0,counts[name]+delta);amount.textContent=counts[name];update()}controls.append(minus,amount,plus);card.append(left,controls);menu.append(card)})});
 function update(){let total=0;sections.forEach(s=>s.items.forEach(([name,price])=>total+=counts[name]*price));document.getElementById('total').textContent=total+' TL'}
